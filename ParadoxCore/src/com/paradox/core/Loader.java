@@ -1,6 +1,7 @@
 package com.paradox.core;
 
 import com.paradox.core.ces.enchants.Magnet;
+import com.paradox.core.general.listeners.EventsListener;
 
 import cn.nukkit.plugin.PluginBase;
 
@@ -10,7 +11,8 @@ public class Loader extends PluginBase {
 	
 	@Override
 	public void onEnable() {
-		
+		registerCommands();
+		registerEvents();
 	}
 	
 	@Override
@@ -28,6 +30,7 @@ public class Loader extends PluginBase {
 	}
 	
 	public void registerEvents() {
+		getServer().getPluginManager().registerEvents(new EventsListener(), this);
 		getServer().getPluginManager().registerEvents(new Magnet(), this);
 	}
 	
