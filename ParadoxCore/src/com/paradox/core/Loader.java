@@ -35,7 +35,7 @@ public class Loader extends PluginBase {
 	}
 
 	public void registerCommands() {
-
+		getServer().getCommandMap().register("orbs", new OrbsCmd());
 	}
 
 	public void registerEvents() {

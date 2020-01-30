@@ -1,6 +1,8 @@
 package com.paradox.core.orbs.listeners;
 
+import com.paradox.core.utils.CEUtils;
 import com.paradox.core.utils.OrbEconomyUtils;
+import com.paradox.core.utils.StringUtils;
 
 import cn.nukkit.Player;
 import cn.nukkit.event.EventHandler;
@@ -15,8 +17,14 @@ public class OrbsListener implements Listener {
 		Player p = e.getPlayer();
 		Item i = p.getInventory().getItemInHand();
 		if (i.getId() == 278) {
-			OrbEconomyUtils.addPlayerBalance(p, 1);
+			if (CEUtils.containsEnchantment(i, CEUtils.getCEByDisplayName(StringUtils.translateColors("&aGreed")))) {
+				int lvl = CEUtils.getLevelOfEnchantByDisplayName(StringUtils.translateColors("&aGreed"), i);
+				double incr = lvl/10.0D;
+				int actualAmount = (int) Math.floor(incr);
+				OrbEconomyUtils.addPlayerBalance(p, 1+actualAmount);
+			} else {
+				OrbEconomyUtils.addPlayerBalance(p, 1);
+			}
 		}
 	}
-
 }
