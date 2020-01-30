@@ -20,19 +20,22 @@ public class EventsListener implements Listener {
 		Item i = p.getInventory().getItemInHand();
 		if (e.getAction() == Action.RIGHT_CLICK_AIR) {
 			if (i.getId() == 278) {
-				p.showFormWindow(FormStorage.enchanterMenu());
 				CooldownManager cm = new CooldownManager();
-				cm.setCooldown(p.getUniqueId(), 3);
-				new NukkitRunnable() {
-					@Override
-					public void run() {
-						int timeLeft = cm.getCooldown(p.getUniqueId());
-						cm.setCooldown(p.getUniqueId(), --timeLeft);
-						if (timeLeft <= 0) {
-							this.cancel();
+				int timeLeft = cm.getCooldown(p.getUniqueId());
+				if (timeLeft == 0) {
+					p.showFormWindow(FormStorage.enchanterMenu());
+					cm.setCooldown(p.getUniqueId(), 3);
+					new NukkitRunnable() {
+						@Override
+						public void run() {
+							int timeLeft = cm.getCooldown(p.getUniqueId());
+							cm.setCooldown(p.getUniqueId(), --timeLeft);
+							if (timeLeft <= 0) {
+								this.cancel();
+							}
 						}
-					}
-				}.runTaskTimer(Loader.getLoader(), 20, 20);
+					}.runTaskTimer(Loader.getLoader(), 20, 20);
+				}
 			}
 		}
 	}

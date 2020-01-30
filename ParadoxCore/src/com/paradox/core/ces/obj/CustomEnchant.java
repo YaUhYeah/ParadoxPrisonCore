@@ -7,14 +7,20 @@ public class CustomEnchant {
 	private int maxLevelOfEnchantment;
 	private String displayNameOfEnchantment;
 	private String description;
+	private int costMultiplier;
 
 	public CustomEnchant(String nameOfEnchantment, int levelOfEnchantment, int maxLevelOfEnchantment,
-			String displayNameOfEnchantment, String description) {
+			String displayNameOfEnchantment, String description, int costMultiplier) {
 		this.nameOfEnchantment = nameOfEnchantment;
 		this.levelOfEnchantment = levelOfEnchantment;
 		this.maxLevelOfEnchantment = maxLevelOfEnchantment;
 		this.displayNameOfEnchantment = displayNameOfEnchantment;
 		this.description = description;
+		this.costMultiplier = costMultiplier;
+	}
+
+	public int getCostMultiplier() {
+		return costMultiplier;
 	}
 
 	public String getNameOfEnchantment() {
