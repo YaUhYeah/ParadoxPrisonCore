@@ -9,7 +9,7 @@ public class MineRegion {
 	private Location locMax;
 	private Level lvl;
 
-	public MineRegion(Location locMin, Location locMax, Level lvl) {
+	public MineRegion(Location locMax, Location locMin, Level lvl) {
 		this.locMin = locMin;
 		this.locMax = locMax;
 		this.lvl = lvl;

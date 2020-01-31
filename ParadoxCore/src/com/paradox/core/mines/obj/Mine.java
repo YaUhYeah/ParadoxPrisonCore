@@ -26,16 +26,17 @@ public class Mine {
 				o.teleport(tpLocation);
 			}
 		}
-		double maxX = region.getLocMax().getX();
-		double maxY = region.getLocMax().getY();
-		double maxZ = region.getLocMax().getZ();
-		double minX = region.getLocMin().getX();
-		double minY = region.getLocMin().getY();
-		double minZ = region.getLocMin().getZ();
+		double maxX = Math.max(region.getLocMin().getX(), region.getLocMax().getX());
+		double maxY = Math.max(region.getLocMin().getY(), region.getLocMax().getY());
+		double maxZ = Math.max(region.getLocMin().getZ(), region.getLocMax().getZ());
+		double minX = Math.min(region.getLocMin().getX(), region.getLocMax().getX());
+		double minY = Math.min(region.getLocMin().getY(), region.getLocMax().getY());
+		double minZ = Math.min(region.getLocMin().getZ(), region.getLocMax().getZ());
 		for (int x = (int) minX; x <= maxX; x++) {
 			for (int y = (int) minY; y <= maxY; y++) {
 				for (int z = (int) minZ; z <= maxZ; z++) {
-					region.getLvl().setBlock(new Location(x, y, z), Block.get(Block.STONE));
+					Loader.getLoader().getServer().getDefaultLevel().setBlock(new Location(x, y, z),
+							Block.get(Block.STONE));
 				}
 			}
 		}

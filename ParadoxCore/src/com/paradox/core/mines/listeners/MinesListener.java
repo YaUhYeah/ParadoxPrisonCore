@@ -45,9 +45,11 @@ public class MinesListener implements Listener {
 							+ ("Mine: " + MineCommand.playersInSetupModeMine.get(p) + " Created!"));
 					MineCommand.playersInSetupModeMine.remove(p);
 					locsForMine.clear();
+					return;
+				} else {
+					locsForMine.add(e.getBlock().getLocation());
+					p.sendActionBar(StringUtils.translateColors("&bAdded location to mine region."));
 				}
-				locsForMine.add(e.getBlock().getLocation());
-				p.sendActionBar(StringUtils.translateColors("&bAdded location to mine region."));
 			}
 		}
 	}

@@ -22,7 +22,7 @@ public class MineUtils {
 		List<Mine> mines = new ArrayList<Mine>();
 		for (String key : minescfg.getSection("Mines").getKeys(false)) {
 			Location tpLoc = new Location(minescfg.getDouble("Mines." + key + ".tpLocX"),
-					(minescfg.getDouble("Mines." + key + ".tpLocY")), (minescfg.getDouble("Mines." + key + ".tpLocz")),
+					(minescfg.getDouble("Mines." + key + ".tpLocY")), (minescfg.getDouble("Mines." + key + ".tpLocZ")),
 					Loader.getLoader().getServer()
 							.getLevelByName(minescfg.getString("Mines." + key + ".tpLocLevelName")));
 			String name = minescfg.getString("Mines." + key + ".name");
@@ -38,7 +38,7 @@ public class MineUtils {
 			for (String comp : minescfg.getSection("Mines." + key + ".composition").getKeys(false)) {
 				maps.put(Block.get(Integer.parseInt(comp)), minescfg.getInt("Mines." + key + ".composition." + comp));
 			}
-			MineRegion mr = new MineRegion(minLoc, maxLoc, Loader.getLoader().getServer()
+			MineRegion mr = new MineRegion(maxLoc, minLoc, Loader.getLoader().getServer()
 					.getLevelByName(minescfg.getString("Mines." + key + ".tpLocLevelName")));
 			MineComposition cmp = new MineComposition(maps);
 			Mine mine = new Mine(mr, name, cmp, tpLoc);
@@ -46,14 +46,14 @@ public class MineUtils {
 		}
 		return mines;
 	}
-	
+
 	public static Mine getMineByName(String name) throws NullPointerException {
-		for (Mine m:getAllMinesFromConfig()) {
+		for (Mine m : getAllMinesFromConfig()) {
 			if (name.equals(m.getMineName())) {
 				return m;
 			}
 		}
 		return null;
 	}
-	
+
 }

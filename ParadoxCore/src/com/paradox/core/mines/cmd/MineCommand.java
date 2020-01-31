@@ -20,7 +20,7 @@ public class MineCommand extends Command {
 	public static HashMap<Player, String> playersInSetupModeMine = new HashMap<>();
 
 	public MineCommand() {
-		super("mine");
+		super("mines");
 	}
 
 	@Override
