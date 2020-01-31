@@ -1,4 +1,4 @@
-package com.paradox.core;
+package com.paradox.core.orbs.cmd;
 
 import com.paradox.core.utils.OrbEconomyUtils;
 import com.paradox.core.utils.StringUtils;

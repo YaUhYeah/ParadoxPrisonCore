@@ -19,6 +19,7 @@ public class EnchantHandler {
 		enchants.add(new Greed());
 		enchants.add(new Unbreaking());
 		enchants.add(new Efficiency());
+		enchants.add(new Fortune());
 		return enchants;
 	}
 
@@ -26,13 +27,14 @@ public class EnchantHandler {
 		List<CustomEnchant> enchants = new ArrayList<CustomEnchant>();
 		enchants.add(new Unbreaking());
 		enchants.add(new Efficiency());
+		enchants.add(new Fortune());
 		return enchants;
 	}
 
 	public static void applyEnchant(Player p, Item item, Enchantment e, int lvl) {
 		if (item.getId() == 278) {
 			p.getInventory().removeItem(item);
-			item.addEnchantment(e.setLevel(lvl,false));
+			item.addEnchantment(e.setLevel(lvl, false));
 			p.getInventory().addItem(item);
 		}
 	}

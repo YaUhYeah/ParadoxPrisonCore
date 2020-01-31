@@ -132,6 +132,24 @@ public class EnchantListener implements Listener {
 													costOfEnchantByPlayer.get(p).getLevel());
 											costOfEnchantByPlayer.remove(p);
 										}
+									} else if (ce.getDisplayNameOfEnchantment().contains("Fortune")) {
+										Enchantment e1 = Enchantment.get(Enchantment.ID_FORTUNE_DIGGING);
+										e1.setLevel(costOfEnchantByPlayer.get(p).getLevel(), false);
+										if (CEUtils.containsEnchantment(p.getInventory().getItemInHand(), e1)) {
+											if (CEUtils.isHigherEnchantLevel(p.getInventory().getItemInHand(), e1)) {
+												EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
+														costOfEnchantByPlayer.get(p).getLevel());
+												costOfEnchantByPlayer.remove(p);
+											} else {
+												p.sendMessage(StringUtils.getPrefix()
+														+ "Your pickaxe already has that enchantment at that level or better.");
+												costOfEnchantByPlayer.remove(p);
+											}
+										} else {
+											EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
+													costOfEnchantByPlayer.get(p).getLevel());
+											costOfEnchantByPlayer.remove(p);
+										}
 									}
 								}
 							} else if (responseName.contains("Deny")) {
