@@ -1,19 +1,17 @@
 package com.paradox.core.mines.obj;
 
-import java.util.HashMap;
-
-import cn.nukkit.block.Block;
+import java.util.List;
 
 public class MineComposition {
 
-	private HashMap<Block, Integer> blocksByChance;
+	private List<MineBlock> mb;
 
-	public MineComposition(HashMap<Block, Integer> blocksByChance) {
-		this.blocksByChance = blocksByChance;
+	public MineComposition(List<MineBlock> mb) {
+		this.mb = mb;
 	}
 
-	public HashMap<Block, Integer> getBlocksByChance() {
-		return blocksByChance;
+	public List<MineBlock> getMb() {
+		return mb;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.paradox.core.mines.obj;
 
 import com.paradox.core.Loader;
+import com.paradox.core.utils.RandomCollection;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
@@ -26,6 +27,7 @@ public class Mine {
 				o.teleport(tpLocation);
 			}
 		}
+
 		double maxX = Math.max(region.getLocMin().getX(), region.getLocMax().getX());
 		double maxY = Math.max(region.getLocMin().getY(), region.getLocMax().getY());
 		double maxZ = Math.max(region.getLocMin().getZ(), region.getLocMax().getZ());
@@ -35,11 +37,19 @@ public class Mine {
 		for (int x = (int) minX; x <= maxX; x++) {
 			for (int y = (int) minY; y <= maxY; y++) {
 				for (int z = (int) minZ; z <= maxZ; z++) {
-					Loader.getLoader().getServer().getDefaultLevel().setBlock(new Location(x, y, z),
-							Block.get(Block.STONE));
+					Block b = getWinningBlock();
+					Loader.getLoader().getServer().getDefaultLevel().setBlock(new Location(x, y, z), b);
 				}
 			}
 		}
+	}
+
+	public Block getWinningBlock() {
+		RandomCollection<Block> random = new RandomCollection<>();
+		for (MineBlock mb : getMineComposition().getMb()) {
+			random.add(mb.getChance(), mb.getBlock());
+		}
+		return random.next();
 	}
 
 	public MineRegion getRegion() {

@@ -2,11 +2,11 @@ package com.paradox.core.utils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.paradox.core.Loader;
 import com.paradox.core.mines.obj.Mine;
+import com.paradox.core.mines.obj.MineBlock;
 import com.paradox.core.mines.obj.MineComposition;
 import com.paradox.core.mines.obj.MineRegion;
 
@@ -23,8 +23,10 @@ public class MineUtils {
 		for (String key : minescfg.getSection("Mines").getKeys(false)) {
 			Location tpLoc = new Location(minescfg.getDouble("Mines." + key + ".tpLocX"),
 					(minescfg.getDouble("Mines." + key + ".tpLocY")), (minescfg.getDouble("Mines." + key + ".tpLocZ")),
+					minescfg.getDouble("Mines." + key + ".tpYaw"), minescfg.getDouble("Mines." + key + ".tpPitch"),
 					Loader.getLoader().getServer()
 							.getLevelByName(minescfg.getString("Mines." + key + ".tpLocLevelName")));
+
 			String name = minescfg.getString("Mines." + key + ".name");
 			Location minLoc = new Location(minescfg.getDouble("Mines." + key + ".minX"),
 					minescfg.getDouble("Mines." + key + ".minY"), minescfg.getDouble("Mines." + key + ".minZ"),
@@ -34,13 +36,15 @@ public class MineUtils {
 					minescfg.getDouble("Mines." + key + ".maxY"), minescfg.getDouble("Mines." + key + ".maxZ"),
 					Loader.getLoader().getServer()
 							.getLevelByName(minescfg.getString("Mines." + key + ".tpLocLevelName")));
-			HashMap<Block, Integer> maps = new HashMap<>();
+			List<MineBlock> mbs = new ArrayList<>();
 			for (String comp : minescfg.getSection("Mines." + key + ".composition").getKeys(false)) {
-				maps.put(Block.get(Integer.parseInt(comp)), minescfg.getInt("Mines." + key + ".composition." + comp));
+				MineBlock mb = new MineBlock(Block.get(Integer.parseInt(comp)),
+						minescfg.getInt("Mines." + key + ".composition." + comp));
+				mbs.add(mb);
 			}
 			MineRegion mr = new MineRegion(maxLoc, minLoc, Loader.getLoader().getServer()
 					.getLevelByName(minescfg.getString("Mines." + key + ".tpLocLevelName")));
-			MineComposition cmp = new MineComposition(maps);
+			MineComposition cmp = new MineComposition(mbs);
 			Mine mine = new Mine(mr, name, cmp, tpLoc);
 			mines.add(mine);
 		}

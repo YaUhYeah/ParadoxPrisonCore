@@ -16,9 +16,15 @@ public class MineRegion {
 	}
 
 	public boolean isInRegion(Location pLoc) {
+		double maxX = Math.max(getLocMin().getX(),getLocMax().getX());
+		double maxY = Math.max(getLocMin().getY(), getLocMax().getY());
+		double maxZ = Math.max(getLocMin().getZ(), getLocMax().getZ());
+		double minX = Math.min(getLocMin().getX(), getLocMax().getX());
+		double minY = Math.min(getLocMin().getY(),  getLocMax().getY());
+		double minZ = Math.min(getLocMin().getZ(), getLocMax().getZ());
 		return pLoc.getLevel().equals(locMax.getLevel())
-				&& (pLoc.getX() >= locMin.getX() && pLoc.getX() <= locMax.getX() && pLoc.getY() >= locMin.getY())
-				&& pLoc.getY() <= locMax.getY() && pLoc.getZ() >= locMin.getZ() && pLoc.getZ() <= locMax.getZ();
+				&& (pLoc.getX() >= minX && pLoc.getX() <= maxX && pLoc.getY() >= minY)
+				&& pLoc.getY() <= maxY&& pLoc.getZ() >= minZ && pLoc.getZ() <= maxZ;
 	}
 
 	public Level getLvl() {
