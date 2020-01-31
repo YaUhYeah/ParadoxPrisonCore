@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.paradox.core.ces.enchants.EnchantHandler;
 import com.paradox.core.ces.forms.FormStorage;
 import com.paradox.core.ces.obj.CustomEnchant;
+import com.paradox.core.ces.obj.EnchantType;
 import com.paradox.core.ces.obj.TempCE;
 import com.paradox.core.utils.CEUtils;
 import com.paradox.core.utils.NumberUtils;
@@ -19,6 +20,7 @@ import cn.nukkit.form.window.FormWindowCustom;
 import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.inventory.PlayerInventory;
 import cn.nukkit.item.Item;
+import cn.nukkit.item.enchantment.Enchantment;
 
 public class EnchantListener implements Listener {
 
@@ -40,7 +42,7 @@ public class EnchantListener implements Listener {
 								p.removeAllWindows();
 								p.showFormWindow(FormStorage.ceMenu(p.getInventory().getItemInHand(), ce));
 								ceByPlayer.put(p, ce);
-								// 
+								//
 							}
 						}
 					}
@@ -53,7 +55,7 @@ public class EnchantListener implements Listener {
 							if (gui.getResponse().getSliderResponse(1) != 0) {
 								float lvl = gui.getResponse().getSliderResponse(1);
 								p.removeAllWindows();
-								p.showFormWindow(FormStorage.confirmMenu((int) lvl,ceByPlayer.get(p)));
+								p.showFormWindow(FormStorage.confirmMenu((int) lvl, ceByPlayer.get(p)));
 								costOfEnchantByPlayer.put(p,
 										new TempCE(ceByPlayer.get(p), (int) lvl,
 												NumberUtils.getCostOfEnchantmentByLevel((int) lvl,
@@ -79,22 +81,62 @@ public class EnchantListener implements Listener {
 						String responseName = gui.getResponse().getClickedButton().getText();
 						if (responseName != null) {
 							if (responseName.contains("Accept")) {
-								if (CEUtils.getLevelOfEnchantByDisplayName(ce.getDisplayNameOfEnchantment(),
-										p.getInventory().getItemInHand()) < costOfEnchantByPlayer.get(p).getLevel()) {
-									p.sendMessage(StringUtils.translateColors(
-											StringUtils.getPrefix()+"The purchased ce was applied to your pickaxe!"));
-									EnchantHandler.applyEnchantment(p, p.getInventory().getItemInHand(), ce,
-											costOfEnchantByPlayer.get(p).getLevel());
-									costOfEnchantByPlayer.remove(p);
+								if (ce.getType().equals(EnchantType.CUSTOM)) {
+									if (CEUtils.getLevelOfEnchantByDisplayName(ce.getDisplayNameOfEnchantment(),
+											p.getInventory().getItemInHand()) < costOfEnchantByPlayer.get(p)
+													.getLevel()) {
+										p.sendMessage(StringUtils.translateColors(StringUtils.getPrefix()
+												+ "The purchased ce was applied to your pickaxe!"));
+										EnchantHandler.applyEnchantment(p, p.getInventory().getItemInHand(), ce,
+												costOfEnchantByPlayer.get(p).getLevel());
+										costOfEnchantByPlayer.remove(p);
+									} else {
+										p.sendMessage(StringUtils.getPrefix()
+												+ "Your pickaxe already has that enchantment at that level or better.");
+										costOfEnchantByPlayer.remove(p);
+									}
 								} else {
-									p.sendMessage(
-											StringUtils.getPrefix() + "Your pickaxe already has that enchantment at that level or lower.");
-									costOfEnchantByPlayer.remove(p);
+									if (ce.getDisplayNameOfEnchantment().contains("Unbreaking")) {
+										Enchantment e1 = Enchantment.get(Enchantment.ID_DURABILITY);
+										e1.setLevel(costOfEnchantByPlayer.get(p).getLevel(), false);
+										if (CEUtils.containsEnchantment(p.getInventory().getItemInHand(), e1)) {
+											if (CEUtils.isHigherEnchantLevel(p.getInventory().getItemInHand(), e1)) {
+												EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
+														costOfEnchantByPlayer.get(p).getLevel());
+												costOfEnchantByPlayer.remove(p);
+											} else {
+												p.sendMessage(StringUtils.getPrefix()
+														+ "Your pickaxe already has that enchantment at that level or better.");
+												costOfEnchantByPlayer.remove(p);
+											}
+										} else {
+											EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
+													costOfEnchantByPlayer.get(p).getLevel());
+											costOfEnchantByPlayer.remove(p);
+										}
+									} else if (ce.getDisplayNameOfEnchantment().contains("Efficiency")) {
+										Enchantment e1 = Enchantment.get(Enchantment.ID_EFFICIENCY);
+										e1.setLevel(costOfEnchantByPlayer.get(p).getLevel(), false);
+										if (CEUtils.containsEnchantment(p.getInventory().getItemInHand(), e1)) {
+											if (CEUtils.isHigherEnchantLevel(p.getInventory().getItemInHand(), e1)) {
+												EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
+														costOfEnchantByPlayer.get(p).getLevel());
+												costOfEnchantByPlayer.remove(p);
+											} else {
+												p.sendMessage(StringUtils.getPrefix()
+														+ "Your pickaxe already has that enchantment at that level or better.");
+												costOfEnchantByPlayer.remove(p);
+											}
+										} else {
+											EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
+													costOfEnchantByPlayer.get(p).getLevel());
+											costOfEnchantByPlayer.remove(p);
+										}
+									}
 								}
 							} else if (responseName.contains("Deny")) {
-								p.sendMessage(StringUtils.translateColors(StringUtils.getPrefix()+"Denied purchase of "
-										+" "
-										+ ce.getDisplayNameOfEnchantment() + "&7!"));
+								p.sendMessage(StringUtils.translateColors(StringUtils.getPrefix()
+										+ "Denied purchase of " + " " + ce.getDisplayNameOfEnchantment() + "&7!"));
 								costOfEnchantByPlayer.remove(p);
 							}
 						}

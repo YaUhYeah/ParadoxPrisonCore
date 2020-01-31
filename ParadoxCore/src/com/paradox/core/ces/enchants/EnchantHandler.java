@@ -9,6 +9,7 @@ import com.paradox.core.utils.CEUtils;
 
 import cn.nukkit.Player;
 import cn.nukkit.item.Item;
+import cn.nukkit.item.enchantment.Enchantment;
 
 public class EnchantHandler {
 
@@ -16,7 +17,24 @@ public class EnchantHandler {
 		List<CustomEnchant> enchants = new ArrayList<CustomEnchant>();
 		enchants.add(new Magnet());
 		enchants.add(new Greed());
+		enchants.add(new Unbreaking());
+		enchants.add(new Efficiency());
 		return enchants;
+	}
+
+	public static List<CustomEnchant> getAllVanillaEnchants() {
+		List<CustomEnchant> enchants = new ArrayList<CustomEnchant>();
+		enchants.add(new Unbreaking());
+		enchants.add(new Efficiency());
+		return enchants;
+	}
+
+	public static void applyEnchant(Player p, Item item, Enchantment e, int lvl) {
+		if (item.getId() == 278) {
+			p.getInventory().removeItem(item);
+			item.addEnchantment(e.setLevel(lvl,false));
+			p.getInventory().addItem(item);
+		}
 	}
 
 	public static void applyEnchantment(Player p, Item item, CustomEnchant ce, int lvl) {
