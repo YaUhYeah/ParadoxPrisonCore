@@ -18,7 +18,7 @@ public class MineUtils {
 	public static Config minescfg = Loader.getLoader().getMinesCfg();
 	public static File minesFile = Loader.getLoader().getMinesFile();
 
-	public List<Mine> getAllMinesFromConfig() {
+	public static List<Mine> getAllMinesFromConfig() {
 		List<Mine> mines = new ArrayList<Mine>();
 		for (String key : minescfg.getSection("Mines").getKeys(false)) {
 			Location tpLoc = new Location(minescfg.getDouble("Mines." + key + ".tpLocX"),
@@ -31,7 +31,7 @@ public class MineUtils {
 					Loader.getLoader().getServer()
 							.getLevelByName(minescfg.getString("Mines." + key + ".tpLocLevelName")));
 			Location maxLoc = new Location(minescfg.getDouble("Mines." + key + ".maxX"),
-					minescfg.getDouble("Mines." + key + ".minY"), minescfg.getDouble("Mines." + key + ".maxZ"),
+					minescfg.getDouble("Mines." + key + ".maxY"), minescfg.getDouble("Mines." + key + ".maxZ"),
 					Loader.getLoader().getServer()
 							.getLevelByName(minescfg.getString("Mines." + key + ".tpLocLevelName")));
 			HashMap<Block, Integer> maps = new HashMap<>();
@@ -46,4 +46,14 @@ public class MineUtils {
 		}
 		return mines;
 	}
+	
+	public static Mine getMineByName(String name) throws NullPointerException {
+		for (Mine m:getAllMinesFromConfig()) {
+			if (name.equals(m.getMineName())) {
+				return m;
+			}
+		}
+		return null;
+	}
+	
 }

@@ -4,7 +4,9 @@ import java.io.File;
 import java.util.HashMap;
 
 import com.paradox.core.Loader;
+import com.paradox.core.mines.obj.Mine;
 import com.paradox.core.utils.ItemStorage;
+import com.paradox.core.utils.MineUtils;
 import com.paradox.core.utils.StringUtils;
 
 import cn.nukkit.Player;
@@ -47,6 +49,17 @@ public class MineCommand extends Command {
 					mines.save(minesFile);
 				} else {
 					p.sendMessage(StringUtils.getPrefix() + "Another player is already setting up mines!");
+				}
+			}
+		} else if (args[0].equals("reset")) {
+			if (sender instanceof Player) {
+				Player p = (Player) sender;
+				if (MineUtils.getMineByName(args[1])!=null) {
+					Mine m = MineUtils.getMineByName(args[1]);
+					m.resetMine();
+					p.sendMessage(StringUtils.getPrefix()+"Reset mine!");
+				} else {
+					p.sendMessage(StringUtils.getPrefix()+"Mine non existant!");
 				}
 			}
 		}
