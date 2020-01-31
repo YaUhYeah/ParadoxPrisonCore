@@ -8,6 +8,7 @@ import com.paradox.core.mines.cmd.MineCommand;
 import com.paradox.core.mines.listeners.MinesListener;
 import com.paradox.core.orbs.cmd.OrbsCmd;
 import com.paradox.core.orbs.listeners.OrbsListener;
+import com.paradox.core.ranks.cmd.RankupCommand;
 
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
@@ -44,6 +45,7 @@ public class Loader extends PluginBase {
 	public void registerCommands() {
 		getServer().getCommandMap().register("orbs", new OrbsCmd());
 		getServer().getCommandMap().register("mines", new MineCommand());
+		getServer().getCommandMap().register("rankup", new RankupCommand());
 	}
 
 	public void registerEvents() {

@@ -51,6 +51,13 @@ public class MineUtils {
 		return mines;
 	}
 
+	public static boolean isLocInMine(Location loc) {
+		for (Mine m : getAllMinesFromConfig()) {
+			return m.getRegion().isInRegion(loc);
+		}
+		return false;
+	}
+
 	public static Mine getMineByName(String name) throws NullPointerException {
 		for (Mine m : getAllMinesFromConfig()) {
 			if (name.equals(m.getMineName())) {

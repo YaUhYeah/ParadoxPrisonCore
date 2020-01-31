@@ -8,6 +8,7 @@ import com.paradox.core.ces.obj.CustomEnchant;
 import com.paradox.core.ces.obj.EnchantType;
 import com.paradox.core.ces.obj.TempCE;
 import com.paradox.core.utils.CEUtils;
+import com.paradox.core.utils.MineUtils;
 import com.paradox.core.utils.NumberUtils;
 import com.paradox.core.utils.StringUtils;
 
@@ -34,15 +35,17 @@ public class EnchantListener implements Listener {
 			if (e.getWindow() instanceof FormWindowSimple) {
 				FormWindowSimple gui = (FormWindowSimple) e.getWindow();
 				if (gui != null) {
-					String responseName = gui.getResponse().getClickedButton().getText();
-					if (responseName != null) {
-						if (CEUtils.getCEByDisplayName(responseName) != null) {
-							CustomEnchant ce = CEUtils.getCEByDisplayName(responseName);
-							if (ce != null) {
-								p.removeAllWindows();
-								p.showFormWindow(FormStorage.ceMenu(p.getInventory().getItemInHand(), ce));
-								ceByPlayer.put(p, ce);
-								//
+					if (gui.getResponse().getClickedButton().getText() != null) {
+						String responseName = gui.getResponse().getClickedButton().getText();
+						if (responseName != null) {
+							if (CEUtils.getCEByDisplayName(responseName) != null) {
+								CustomEnchant ce = CEUtils.getCEByDisplayName(responseName);
+								if (ce != null) {
+									p.removeAllWindows();
+									p.showFormWindow(FormStorage.ceMenu(p.getInventory().getItemInHand(), ce));
+									ceByPlayer.put(p, ce);
+									//
+								}
 							}
 						}
 					}
@@ -168,13 +171,15 @@ public class EnchantListener implements Listener {
 	public void onMine(BlockBreakEvent e) {
 		Item tool = e.getPlayer().getInventory().getItemInHand();
 		if (CEUtils.containsEnchantment(tool, CEUtils.getCEByDisplayName(StringUtils.translateColors("&fMagnet")))) {
-			PlayerInventory inventoryAutoAdd = e.getPlayer().getInventory();
-			Item[] itemsToAdd = e.getDrops();
-			if (!e.isCancelled()) {
-				inventoryAutoAdd.addItem(itemsToAdd);
+			if (MineUtils.isLocInMine(e.getBlock().getLocation())) {
+				PlayerInventory inventoryAutoAdd = e.getPlayer().getInventory();
+				Item[] itemsToAdd = e.getDrops();
+				if (!e.isCancelled()) {
+					inventoryAutoAdd.addItem(itemsToAdd);
+				}
+				Item[] dropsNull = { new Item(0) };
+				e.setDrops(dropsNull);
 			}
-			Item[] dropsNull = { new Item(0) };
-			e.setDrops(dropsNull);
 		}
 	}
 }
