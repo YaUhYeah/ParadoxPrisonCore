@@ -8,6 +8,7 @@ import com.paradox.core.ces.forms.FormStorage;
 import com.paradox.core.ces.obj.CustomEnchant;
 import com.paradox.core.ces.obj.EnchantType;
 import com.paradox.core.ces.obj.TempCE;
+import com.paradox.core.general.cmd.SellCommand;
 import com.paradox.core.mines.LuckyRewardStorage;
 import com.paradox.core.mines.obj.LuckyReward;
 import com.paradox.core.utils.CEUtils;
@@ -241,13 +242,24 @@ public class EnchantListener implements Listener {
 				}
 				if (CEUtils.containsEnchantment(tool,
 						CEUtils.getCEByDisplayName(StringUtils.translateColors("&fMagnet")))) {
-					PlayerInventory inventoryAutoAdd = e.getPlayer().getInventory();
-					Item[] itemsToAdd = e.getDrops();
-					if (!e.isCancelled()) {
-						inventoryAutoAdd.addItem(itemsToAdd);
+					if (!CEUtils.containsEnchantment(tool,
+							CEUtils.getCEByDisplayName(StringUtils.translateColors("&dAutoSell")))) {
+						PlayerInventory inventoryAutoAdd = e.getPlayer().getInventory();
+						Item[] itemsToAdd = e.getDrops();
+						if (!e.isCancelled()) {
+							inventoryAutoAdd.addItem(itemsToAdd);
+						}
+						Item[] dropsNull = { new Item(0) };
+						e.setDrops(dropsNull);
 					}
-					Item[] dropsNull = { new Item(0) };
-					e.setDrops(dropsNull);
+				}
+				if (CEUtils.containsEnchantment(tool,
+						CEUtils.getCEByDisplayName(StringUtils.translateColors("&dAutoSell")))) {
+					if (SellCommand.canSell(e.getBlock().toItem())) {
+						e.setCancelled();
+						e.getPlayer().getLevel().setBlock(e.getBlock().getLocation(), new BlockAir());
+						SellCommand.sellItem(e.getPlayer(), e.getBlock().toItem());
+					}
 				}
 			} else {
 				e.setCancelled();

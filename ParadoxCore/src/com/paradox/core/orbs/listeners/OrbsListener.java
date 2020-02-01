@@ -20,7 +20,7 @@ public class OrbsListener implements Listener {
 	public void onInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
 		Item i = p.getInventory().getItemInHand();
-		if (i.getCustomName().equals(ItemStorage.orbPouchTierOne().getCustomName())){
+		if (i.getCustomName().equals(ItemStorage.orbPouchTierOne().getCustomName())) {
 			e.setCancelled();
 			GeneralUtils.pop(i, p, 1);
 			int amount = GeneralUtils.getRandomNumberInRange(1000, 10000);
@@ -28,7 +28,7 @@ public class OrbsListener implements Listener {
 			p.sendMessage(StringUtils.getPrefix() + "You were given " + amount + " orbs!");
 		}
 	}
-	
+
 	@EventHandler
 	public void onBreak(BlockBreakEvent e) {
 		Player p = e.getPlayer();
@@ -40,9 +40,9 @@ public class OrbsListener implements Listener {
 					double incr = lvl / 10.0D;
 					int actualAmount = (int) Math.floor(incr);
 					OrbEconomyUtils.addPlayerBalance(p, 1 + actualAmount);
-				} else {
-					OrbEconomyUtils.addPlayerBalance(p, 1);
 				}
+			} else {
+				OrbEconomyUtils.addPlayerBalance(p, 1);
 			}
 		}
 	}

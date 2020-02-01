@@ -1,11 +1,39 @@
 package com.paradox.core.utils;
 
+import java.io.File;
 import java.util.Random;
+
+import com.paradox.core.Loader;
 
 import cn.nukkit.Player;
 import cn.nukkit.item.Item;
+import cn.nukkit.utils.Config;
 
 public class GeneralUtils {
+
+	public static Config worth = Loader.getLoader().getWorthCfg();
+	public static File worthFile = Loader.getLoader().getWorthFile();
+
+	public static void setupWorthFile() {
+		if (!worth.exists("worth")) {
+			worth.set("worth.1", 8.0);
+			worth.set("worth.4", 4.0);
+			worth.set("worth.5", 12.0);
+			worth.set("worth.14", 20.0);
+			worth.set("worth.15", 28.0);
+			worth.set("worth.331", 24.0);
+			worth.set("worth.266", 40.0);
+			worth.set("worth.265", 48.0);
+			worth.set("worth.264", 50.0);
+			worth.set("worth.388", 100.0);
+			worth.set("worth.49", 200.0);
+			worth.set("worth.42", 225.0);
+			worth.set("worth.41", 275.0);
+			worth.set("worth.57", 450.0);
+			worth.set("worth.133", 9000.0);
+			worth.save(worthFile);
+		}
+	}
 
 	public static void pop(Item item, Player p, int amount) {
 		p.getInventory().remove(item);

@@ -18,6 +18,11 @@ public class RankUtils {
 		return players.getInt("Players." + p.getName() + ".prestigeLevel");
 	}
 
+	public static void setPrestigeLevelForPlayer(Player p, int amount) {
+		players.set("Players." + p.getName() + ".prestigeLevel", getPrestigeLevelForPlayer(p) + amount);
+		players.save(playersFile);
+	}
+
 	public static Rank getRankByPlayer(Player p) throws NullPointerException {
 		for (Rank r : RankStorage.getAllRanks()) {
 			if (r.getName().equals(players.getString("Players." + p.getName() + ".rank"))) {
@@ -26,20 +31,27 @@ public class RankUtils {
 		}
 		return null;
 	}
-	
-	public static Rank getRankByOrder(int order) {
+	public static Rank getRankByName(String name) {
 		for (Rank r : RankStorage.getAllRanks()) {
-			if (r.getOrder()==order) {
+			if (r.getName().equals(name)) {
 				return r;
 			}
 		}
 		return null;
 	}
-	
+	public static Rank getRankByOrder(int order) {
+		for (Rank r : RankStorage.getAllRanks()) {
+			if (r.getOrder() == order) {
+				return r;
+			}
+		}
+		return null;
+	}
+
 	public static Rank getNextRankByPlayer(Player p) {
 		for (Rank r : RankStorage.getAllRanks()) {
 			if (r.getName().equals(players.getString("Players." + p.getName() + ".rank"))) {
-				return getRankByOrder(r.getOrder()+1);
+				return getRankByOrder(r.getOrder() + 1);
 			}
 		}
 		return null;

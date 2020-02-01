@@ -15,11 +15,12 @@ public class EnchantHandler {
 
 	public static List<CustomEnchant> getAllEnchants() {
 		List<CustomEnchant> enchants = new ArrayList<CustomEnchant>();
-		enchants.add(new Magnet());
-		enchants.add(new Greed());
 		enchants.add(new Unbreaking());
 		enchants.add(new Efficiency());
 		enchants.add(new Fortune());
+		enchants.add(new Magnet());
+		enchants.add(new Greed());
+		enchants.add(new AutoSell());
 		return enchants;
 	}
 

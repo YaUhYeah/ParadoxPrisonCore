@@ -8,6 +8,7 @@ import com.paradox.core.mines.cmd.MineCommand;
 import com.paradox.core.mines.obj.Mine;
 import com.paradox.core.utils.ItemStorage;
 import com.paradox.core.utils.MineUtils;
+import com.paradox.core.utils.RankUtils;
 import com.paradox.core.utils.StringUtils;
 
 import cn.nukkit.Player;
@@ -35,10 +36,19 @@ public class MinesListener implements Listener {
 						String responseName = gui.getResponse().getClickedButton().getText();
 						if (responseName != null) {
 							for (Mine m : MineUtils.getAllMinesFromConfig()) {
-								if (responseName.contains(m.getMineName())) {
-									p.teleport(m.getTpLocation());
-									p.sendActionBar(StringUtils
-											.translateColors("&bTeleported to mine " + m.getMineName() + "."));
+								if (responseName.equals(StringUtils.translateColors("&a" + m.getMineName()))) {
+									if (RankUtils.getRankByName(m.getMineName()) != null) {
+										if (RankUtils.getRankByName(m.getMineName()).getOrder() <= RankUtils
+												.getRankByPlayer(p).getOrder()) {
+											p.teleport(m.getTpLocation());
+											p.sendActionBar(StringUtils
+													.translateColors("&bTeleported to mine " + m.getMineName() + "."));
+										} else {
+											p.sendMessage(StringUtils.getPrefix()+"No perms for this mine! /rankup!");
+										}
+									} else {
+										p.sendMessage(StringUtils.translateColors("&cERROR! Please alert an admin! ERROR CODE: 0x000001 Null."));
+									}
 								}
 							}
 						}
@@ -46,6 +56,7 @@ public class MinesListener implements Listener {
 				}
 			}
 		}
+
 	}
 
 	@EventHandler
