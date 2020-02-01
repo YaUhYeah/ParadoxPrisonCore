@@ -21,7 +21,7 @@ public class MineCommand extends Command {
 	public static HashMap<Player, String> playersInSetupModeMine = new HashMap<>();
 
 	public MineCommand() {
-		super("mines");
+		super("mines", "Mines cmd", "/mines", new String[] {"mine"});
 	}
 
 	@Override
@@ -81,6 +81,7 @@ public class MineCommand extends Command {
 						mines.set("Mines." + args[1] + ".tpYaw", p.getLocation().getYaw());
 						mines.set("Mines." + args[1] + ".tpPitch", p.getLocation().getPitch());
 						mines.set("Mines." + args[1] + ".tpLocLevelName", p.getLevel().getName());
+						mines.save(minesFile);
 						p.sendMessage(StringUtils.getPrefix() + "Set tp location!");
 					} else {
 						p.sendMessage(StringUtils.getPrefix() + "Mine non existant!");

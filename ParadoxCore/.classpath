@@ -3,6 +3,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="D:/Spigot 1.8 Server/custom.jar"/>
-	<classpathentry kind="lib" path="C:/Users/YaUhYeah/Downloads/FastAsyncWorldEdit-nukkit-19.03.29-d13b946-1257-22.0.14.jar"/>
+	<classpathentry kind="lib" path="D:/Spigot 1.8 Server/plugins/EconomyAPI (1).jar"/>
+	<classpathentry kind="lib" path="D:/Spigot 1.8 Server/plugins/PlaceholderAPI-1.0-SNAPSHOT (2).jar"/>
+	<classpathentry kind="lib" path="D:/Spigot 1.8 Server/plugins/PlotSquared-Nukkit-19.09.07-f27e556-781.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

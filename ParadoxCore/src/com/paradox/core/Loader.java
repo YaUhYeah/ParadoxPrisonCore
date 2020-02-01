@@ -2,6 +2,7 @@ package com.paradox.core;
 
 import java.io.File;
 
+import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
 import com.paradox.core.ces.listeners.EnchantListener;
 import com.paradox.core.general.listeners.EventsListener;
 import com.paradox.core.mines.cmd.MineCommand;
@@ -9,6 +10,8 @@ import com.paradox.core.mines.listeners.MinesListener;
 import com.paradox.core.orbs.cmd.OrbsCmd;
 import com.paradox.core.orbs.listeners.OrbsListener;
 import com.paradox.core.ranks.cmd.RankupCommand;
+import com.paradox.core.utils.OrbEconomyUtils;
+import com.paradox.core.utils.RankUtils;
 
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
@@ -23,6 +26,10 @@ public class Loader extends PluginBase {
 
 	@Override
 	public void onEnable() {
+		PlaceholderAPI api = PlaceholderAPI.getInstance();
+		api.visitorSensitivePlaceholder("playerorbs", (p, T) -> OrbEconomyUtils.getPlayersTokenBalance(p));
+		api.visitorSensitivePlaceholder("prisonrank", (p, T) -> RankUtils.getRankByPlayer(p).getName());
+		api.visitorSensitivePlaceholder("prestige", (p, T) -> RankUtils.getPrestigeLevelForPlayer(p));
 		getDataFolder().mkdirs();
 		playersFile = new File(getDataFolder(), "players.yml");
 		playerCfg = new Config(playersFile);

@@ -7,10 +7,34 @@ import com.paradox.core.ranks.obj.Rank;
 
 public class RankStorage {
 	
-	public List<Rank> getAllRanks(){
+	public static List<Rank> getAllRanks(){
 		List<Rank> ranks = new ArrayList<>();
 		ranks.add(A);
 		ranks.add(B);
+		ranks.add(C);
+		ranks.add(D);
+		ranks.add(E);
+		ranks.add(F);
+		ranks.add(G);
+		ranks.add(H);
+		ranks.add(I);
+		ranks.add(J);
+		ranks.add(K);
+		ranks.add(L);
+		ranks.add(M);
+		ranks.add(N);
+		ranks.add(O);
+		ranks.add(P);
+		ranks.add(Q);
+		ranks.add(R);
+		ranks.add(S);
+		ranks.add(T);
+		ranks.add(U);
+		ranks.add(V);
+		ranks.add(W);
+		ranks.add(X);
+		ranks.add(Y);
+		ranks.add(Z);
 		return ranks;
 		//todo: add all ranks then finish rankutils.
 	}

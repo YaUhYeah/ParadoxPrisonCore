@@ -6,10 +6,13 @@ import com.paradox.core.Loader;
 import com.paradox.core.ces.forms.FormStorage;
 import com.paradox.core.ranks.storage.RankStorage;
 import com.paradox.core.utils.CooldownManager;
+import com.paradox.core.utils.RankUtils;
+import com.paradox.core.utils.StringUtils;
 
 import cn.nukkit.Player;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
+import cn.nukkit.event.player.PlayerChatEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
 import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.event.player.PlayerInteractEvent.Action;
@@ -20,6 +23,13 @@ import cn.nukkit.utils.Config;
 public class EventsListener implements Listener {
 	public static Config players = Loader.getLoader().getPlayerCfg();
 	public static File playersFile = Loader.getLoader().getPlayersFile();
+
+	@EventHandler
+	public void onChat(PlayerChatEvent e) {
+		Player p = e.getPlayer();
+		e.setFormat(StringUtils.translateColors("&8[&7" + RankUtils.getPrestigeLevelForPlayer(p) + "&8]&7 &8[&7"
+				+ RankUtils.getRankByPlayer(p).getName() + "&8]&7 ") + e.getFormat());
+	}
 
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {

@@ -5,13 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.paradox.core.mines.cmd.MineCommand;
+import com.paradox.core.mines.obj.Mine;
 import com.paradox.core.utils.ItemStorage;
+import com.paradox.core.utils.MineUtils;
 import com.paradox.core.utils.StringUtils;
 
 import cn.nukkit.Player;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.BlockBreakEvent;
+import cn.nukkit.event.player.PlayerFormRespondedEvent;
+import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.level.Location;
 import cn.nukkit.utils.Config;
 
@@ -19,6 +23,30 @@ public class MinesListener implements Listener {
 	public static Config mines = MineCommand.mines;
 	public static File minesFile = MineCommand.minesFile;
 	List<Location> locsForMine = new ArrayList<>();
+
+	@EventHandler
+	public void onResponse(PlayerFormRespondedEvent e) {
+		Player p = e.getPlayer();
+		if (e.getWindow() != null) {
+			if (e.getWindow() instanceof FormWindowSimple) {
+				FormWindowSimple gui = (FormWindowSimple) e.getWindow();
+				if (gui != null) {
+					if (gui.getResponse().getClickedButton().getText() != null) {
+						String responseName = gui.getResponse().getClickedButton().getText();
+						if (responseName != null) {
+							for (Mine m : MineUtils.getAllMinesFromConfig()) {
+								if (responseName.contains(m.getMineName())) {
+									p.teleport(m.getTpLocation());
+									p.sendActionBar(StringUtils
+											.translateColors("&bTeleported to mine " + m.getMineName() + "."));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 	@EventHandler
 	public void onBreak(BlockBreakEvent e) {

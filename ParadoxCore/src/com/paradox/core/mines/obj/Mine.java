@@ -38,7 +38,10 @@ public class Mine {
 			for (int y = (int) minY; y <= maxY; y++) {
 				for (int z = (int) minZ; z <= maxZ; z++) {
 					Block b = getWinningBlock();
-					Loader.getLoader().getServer().getDefaultLevel().setBlock(new Location(x, y, z), b);
+					Location loc = new Location(x, y, z);
+					if (Loader.getLoader().getServer().getDefaultLevel().getBlock(x, y, z).getId() == 0) {
+						Loader.getLoader().getServer().getDefaultLevel().setBlock(loc, b);
+					}
 				}
 			}
 		}
