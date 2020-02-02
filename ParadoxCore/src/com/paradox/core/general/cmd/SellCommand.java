@@ -34,25 +34,24 @@ public class SellCommand extends Command {
 	}
 
 	public static void sellInv(Player p) {
+		double total = 0;
 		for (Item i : p.getInventory().getContents().values()) {
 			if (canSell(i)) {
-				EconomyAPI.getInstance().addMoney(p,
-						worth.getDouble("worth." + i.getId()) * getNumberOfItemInv(i, p));
-				p.sendMessage(StringUtils.getPrefix() + "Sold blocks mined for $"
-						+ worth.getDouble("worth." + i.getId()) * getNumberOfItemInv(i, p) + ".");
+				total += (worth.getDouble("worth." + i.getId()) * getNumberOfItemInv(i, p));
 				p.getInventory().remove(i);
 			}
 		}
+		EconomyAPI.getInstance().addMoney(p, total);
+		p.sendMessage(StringUtils.getPrefix() + "Sold blocks mined for $" + total + ".");
 	}
-	
+
 	public static void sellItem(Player p, Item item) {
 		if (canSell(item)) {
-			EconomyAPI.getInstance().addMoney(p,
-					worth.getDouble("worth." + item.getId()));
+			EconomyAPI.getInstance().addMoney(p, worth.getDouble("worth." + item.getId()));
 			p.sendActionBar(StringUtils.translateColors("&b&l(!)&r&d AutoSell Enchant Activated!"));
 		}
 	}
-	
+
 	public static int getNumberOfItemInv(Item item, Player p) {
 		int it = 0;
 		for (Item i : p.getInventory().getContents().values()) {

@@ -5,6 +5,5 @@
 	<classpathentry kind="lib" path="D:/Spigot 1.8 Server/custom.jar"/>
 	<classpathentry kind="lib" path="D:/Spigot 1.8 Server/plugins/EconomyAPI (1).jar"/>
 	<classpathentry kind="lib" path="D:/Spigot 1.8 Server/plugins/PlaceholderAPI-1.0-SNAPSHOT (2).jar"/>
-	<classpathentry kind="lib" path="D:/Spigot 1.8 Server/plugins/PlotSquared-Nukkit-19.09.07-f27e556-781.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,6 +1,7 @@
 package com.paradox.core.ces.listeners;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import com.paradox.core.Loader;
 import com.paradox.core.ces.enchants.EnchantHandler;
@@ -52,7 +53,6 @@ public class EnchantListener implements Listener {
 									p.removeAllWindows();
 									p.showFormWindow(FormStorage.ceMenu(p.getInventory().getItemInHand(), ce));
 									ceByPlayer.put(p, ce);
-									//
 								}
 							}
 						}
@@ -90,25 +90,51 @@ public class EnchantListener implements Listener {
 					CustomEnchant ce = costOfEnchantByPlayer.get(p).getCe();
 					if (gui != null) {
 						String responseName = gui.getResponse().getClickedButton().getText();
-						if (responseName != null) {
-							if (responseName.contains("Accept")) {
-								if (ce.getType().equals(EnchantType.CUSTOM)) {
+						if (responseName.contains("Accept")) {
+							if (ce.getType().equals(EnchantType.CUSTOM)) {
+								if (OrbEconomyUtils.hasPlayerBalance(p, costOfEnchantByPlayer.get(p).getCost())) {
+									if (CEUtils.getLevelOfEnchantByDisplayName(ce.getDisplayNameOfEnchantment(),
+											p.getInventory().getItemInHand()) < costOfEnchantByPlayer.get(p)
+													.getLevel()) {
+										OrbEconomyUtils.removePlayerBalance(p, costOfEnchantByPlayer.get(p).getCost());
+										p.sendMessage(StringUtils.translateColors(StringUtils.getPrefix()
+												+ "The purchased ce was applied to your pickaxe!"));
+										EnchantHandler.applyEnchantment(p, p.getInventory().getItemInHand(), ce,
+												costOfEnchantByPlayer.get(p).getLevel());
+										costOfEnchantByPlayer.remove(p);
+										OrbEconomyUtils.removePlayerBalance(p, costOfEnchantByPlayer.get(p).getCost());
+									} else {
+										p.sendMessage(StringUtils.getPrefix()
+												+ "Your pickaxe already has that enchantment at that level or better.");
+										costOfEnchantByPlayer.remove(p);
+									}
+								} else {
+									p.sendMessage(StringUtils.getPrefix()
+											+ "You do not have enough orbs to make that purchase.");
+									costOfEnchantByPlayer.remove(p);
+								}
+							} else {
+								if (ce.getDisplayNameOfEnchantment().contains("Unbreaking")) {
 									if (OrbEconomyUtils.hasPlayerBalance(p, costOfEnchantByPlayer.get(p).getCost())) {
-										if (CEUtils.getLevelOfEnchantByDisplayName(ce.getDisplayNameOfEnchantment(),
-												p.getInventory().getItemInHand()) < costOfEnchantByPlayer.get(p)
-														.getLevel()) {
-											OrbEconomyUtils.removePlayerBalance(p,
-													costOfEnchantByPlayer.get(p).getCost());
-											p.sendMessage(StringUtils.translateColors(StringUtils.getPrefix()
-													+ "The purchased ce was applied to your pickaxe!"));
-											EnchantHandler.applyEnchantment(p, p.getInventory().getItemInHand(), ce,
-													costOfEnchantByPlayer.get(p).getLevel());
-											costOfEnchantByPlayer.remove(p);
-											OrbEconomyUtils.removePlayerBalance(p,
-													costOfEnchantByPlayer.get(p).getCost());
+										Enchantment e1 = Enchantment.get(Enchantment.ID_DURABILITY);
+										e1.setLevel(costOfEnchantByPlayer.get(p).getLevel(), false);
+										if (CEUtils.containsEnchantment(p.getInventory().getItemInHand(), e1)) {
+											if (CEUtils.isHigherEnchantLevel(p.getInventory().getItemInHand(), e1)) {
+												EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
+														costOfEnchantByPlayer.get(p).getLevel());
+												OrbEconomyUtils.removePlayerBalance(p,
+														costOfEnchantByPlayer.get(p).getCost());
+												costOfEnchantByPlayer.remove(p);
+											} else {
+												p.sendMessage(StringUtils.getPrefix()
+														+ "Your pickaxe already has that enchantment at that level or better.");
+												costOfEnchantByPlayer.remove(p);
+											}
 										} else {
-											p.sendMessage(StringUtils.getPrefix()
-													+ "Your pickaxe already has that enchantment at that level or better.");
+											EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
+													costOfEnchantByPlayer.get(p).getLevel());
+											OrbEconomyUtils.removePlayerBalance(p,
+													costOfEnchantByPlayer.get(p).getCost());
 											costOfEnchantByPlayer.remove(p);
 										}
 									} else {
@@ -116,106 +142,71 @@ public class EnchantListener implements Listener {
 												+ "You do not have enough orbs to make that purchase.");
 										costOfEnchantByPlayer.remove(p);
 									}
-								} else {
-									if (ce.getDisplayNameOfEnchantment().contains("Unbreaking")) {
-										if (OrbEconomyUtils.hasPlayerBalance(p,
-												costOfEnchantByPlayer.get(p).getCost())) {
-											Enchantment e1 = Enchantment.get(Enchantment.ID_DURABILITY);
-											e1.setLevel(costOfEnchantByPlayer.get(p).getLevel(), false);
-											if (CEUtils.containsEnchantment(p.getInventory().getItemInHand(), e1)) {
-												if (CEUtils.isHigherEnchantLevel(p.getInventory().getItemInHand(),
-														e1)) {
-													EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
-															costOfEnchantByPlayer.get(p).getLevel());
-													OrbEconomyUtils.removePlayerBalance(p,
-															costOfEnchantByPlayer.get(p).getCost());
-													costOfEnchantByPlayer.remove(p);
-												} else {
-													p.sendMessage(StringUtils.getPrefix()
-															+ "Your pickaxe already has that enchantment at that level or better.");
-													costOfEnchantByPlayer.remove(p);
-												}
-											} else {
+								} else if (ce.getDisplayNameOfEnchantment().contains("Efficiency")) {
+									if (OrbEconomyUtils.hasPlayerBalance(p, costOfEnchantByPlayer.get(p).getCost())) {
+										Enchantment e1 = Enchantment.get(Enchantment.ID_EFFICIENCY);
+										e1.setLevel(costOfEnchantByPlayer.get(p).getLevel(), false);
+										if (CEUtils.containsEnchantment(p.getInventory().getItemInHand(), e1)) {
+											if (CEUtils.isHigherEnchantLevel(p.getInventory().getItemInHand(), e1)) {
 												EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
 														costOfEnchantByPlayer.get(p).getLevel());
 												OrbEconomyUtils.removePlayerBalance(p,
 														costOfEnchantByPlayer.get(p).getCost());
 												costOfEnchantByPlayer.remove(p);
+											} else {
+												p.sendMessage(StringUtils.getPrefix()
+														+ "Your pickaxe already has that enchantment at that level or better.");
+												costOfEnchantByPlayer.remove(p);
 											}
 										} else {
-											p.sendMessage(StringUtils.getPrefix()
-													+ "You do not have enough orbs to make that purchase.");
+											EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
+													costOfEnchantByPlayer.get(p).getLevel());
+											OrbEconomyUtils.removePlayerBalance(p,
+													costOfEnchantByPlayer.get(p).getCost());
 											costOfEnchantByPlayer.remove(p);
 										}
-									} else if (ce.getDisplayNameOfEnchantment().contains("Efficiency")) {
-										if (OrbEconomyUtils.hasPlayerBalance(p,
-												costOfEnchantByPlayer.get(p).getCost())) {
-											Enchantment e1 = Enchantment.get(Enchantment.ID_EFFICIENCY);
-											e1.setLevel(costOfEnchantByPlayer.get(p).getLevel(), false);
-											if (CEUtils.containsEnchantment(p.getInventory().getItemInHand(), e1)) {
-												if (CEUtils.isHigherEnchantLevel(p.getInventory().getItemInHand(),
-														e1)) {
-													EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
-															costOfEnchantByPlayer.get(p).getLevel());
-													OrbEconomyUtils.removePlayerBalance(p,
-															costOfEnchantByPlayer.get(p).getCost());
-													costOfEnchantByPlayer.remove(p);
-												} else {
-													p.sendMessage(StringUtils.getPrefix()
-															+ "Your pickaxe already has that enchantment at that level or better.");
-													costOfEnchantByPlayer.remove(p);
-												}
-											} else {
+									} else {
+										p.sendMessage(StringUtils.getPrefix()
+												+ "You do not have enough orbs to make that purchase.");
+										costOfEnchantByPlayer.remove(p);
+									}
+								} else if (ce.getDisplayNameOfEnchantment().contains("Fortune")) {
+									if (OrbEconomyUtils.hasPlayerBalance(p, costOfEnchantByPlayer.get(p).getCost())) {
+										Enchantment e1 = Enchantment.get(Enchantment.ID_FORTUNE_DIGGING);
+										e1.setLevel(costOfEnchantByPlayer.get(p).getLevel(), false);
+										if (CEUtils.containsEnchantment(p.getInventory().getItemInHand(), e1)) {
+											if (CEUtils.isHigherEnchantLevel(p.getInventory().getItemInHand(), e1)) {
 												EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
 														costOfEnchantByPlayer.get(p).getLevel());
 												OrbEconomyUtils.removePlayerBalance(p,
 														costOfEnchantByPlayer.get(p).getCost());
 												costOfEnchantByPlayer.remove(p);
-											}
-										} else {
-											p.sendMessage(StringUtils.getPrefix()
-													+ "You do not have enough orbs to make that purchase.");
-											costOfEnchantByPlayer.remove(p);
-										}
-									} else if (ce.getDisplayNameOfEnchantment().contains("Fortune")) {
-										if (OrbEconomyUtils.hasPlayerBalance(p,
-												costOfEnchantByPlayer.get(p).getCost())) {
-											Enchantment e1 = Enchantment.get(Enchantment.ID_FORTUNE_DIGGING);
-											e1.setLevel(costOfEnchantByPlayer.get(p).getLevel(), false);
-											if (CEUtils.containsEnchantment(p.getInventory().getItemInHand(), e1)) {
-												if (CEUtils.isHigherEnchantLevel(p.getInventory().getItemInHand(),
-														e1)) {
-													EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
-															costOfEnchantByPlayer.get(p).getLevel());
-													OrbEconomyUtils.removePlayerBalance(p,
-															costOfEnchantByPlayer.get(p).getCost());
-													costOfEnchantByPlayer.remove(p);
-												} else {
-													p.sendMessage(StringUtils.getPrefix()
-															+ "Your pickaxe already has that enchantment at that level or better.");
-													costOfEnchantByPlayer.remove(p);
-												}
 											} else {
-												EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
-														costOfEnchantByPlayer.get(p).getLevel());
-												OrbEconomyUtils.removePlayerBalance(p,
-														costOfEnchantByPlayer.get(p).getCost());
+												p.sendMessage(StringUtils.getPrefix()
+														+ "Your pickaxe already has that enchantment at that level or better.");
 												costOfEnchantByPlayer.remove(p);
 											}
 										} else {
-											p.sendMessage(StringUtils.getPrefix()
-													+ "You do not have enough orbs to make that purchase.");
+											EnchantHandler.applyEnchant(p, p.getInventory().getItemInHand(), e1,
+													costOfEnchantByPlayer.get(p).getLevel());
+											OrbEconomyUtils.removePlayerBalance(p,
+													costOfEnchantByPlayer.get(p).getCost());
 											costOfEnchantByPlayer.remove(p);
 										}
+									} else {
+										p.sendMessage(StringUtils.getPrefix()
+												+ "You do not have enough orbs to make that purchase.");
+										costOfEnchantByPlayer.remove(p);
 									}
 								}
-							} else if (responseName.contains("Deny")) {
-								p.sendMessage(StringUtils.translateColors(StringUtils.getPrefix()
-										+ "Denied purchase of " + " " + ce.getDisplayNameOfEnchantment() + "&7!"));
-								costOfEnchantByPlayer.remove(p);
 							}
+						} else if (responseName.contains("Deny")) {
+							p.sendMessage(StringUtils.translateColors(StringUtils.getPrefix() + "Denied purchase of "
+									+ " " + ce.getDisplayNameOfEnchantment() + "&7!"));
+							costOfEnchantByPlayer.remove(p);
 						}
 					}
+					costOfEnchantByPlayer.remove(p);
 				}
 			}
 		}
@@ -224,7 +215,9 @@ public class EnchantListener implements Listener {
 	@EventHandler
 	public void onMine(BlockBreakEvent e) {
 		if (!e.isCancelled()) {
-			if (MineUtils.isLocInMine(e.getBlock().getLocation())) {
+			if ((MineUtils.isLocInMine(e.getBlock().getLocation())
+					&& e.getPlayer().getLevel().equals(Loader.getLoader().getServer().getDefaultLevel()))
+					|| e.getPlayer().hasPermission("paradox.admin")) {
 				Item tool = e.getPlayer().getInventory().getItemInHand();
 				if (e.getBlock().getId() == 19) {
 					RandomCollection<LuckyReward> randomrewards = new RandomCollection<>();
@@ -259,6 +252,17 @@ public class EnchantListener implements Listener {
 						e.setCancelled();
 						e.getPlayer().getLevel().setBlock(e.getBlock().getLocation(), new BlockAir());
 						SellCommand.sellItem(e.getPlayer(), e.getBlock().toItem());
+					}
+				}
+				if (CEUtils.containsEnchantment(tool,
+						CEUtils.getCEByDisplayName(StringUtils.translateColors("&6Donator")))) {
+					int lvl = CEUtils.getLevelOfEnchantByDisplayName(StringUtils.translateColors("&6Donator"), tool);
+					if (new Random().nextInt(101) <= 1) {
+						for (Player o : Loader.getLoader().getServer().getOnlinePlayers().values()) {
+							OrbEconomyUtils.addPlayerBalance(o, lvl * 10);
+							o.sendPopup(StringUtils.getPrefix() + e.getPlayer().getName() + " donated everyone "
+									+ lvl * 10 + " orbs with donator enchant!");
+						}
 					}
 				}
 			} else {

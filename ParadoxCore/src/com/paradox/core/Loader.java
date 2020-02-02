@@ -4,8 +4,11 @@ import java.io.File;
 import java.util.HashMap;
 
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
+import com.paradox.core.ah.cmd.AuctionHouseComamnd;
+import com.paradox.core.ah.listeners.AuctionListener;
 import com.paradox.core.ces.listeners.EnchantListener;
 import com.paradox.core.general.cmd.SellCommand;
+import com.paradox.core.general.cmd.TPSCommand;
 import com.paradox.core.general.listeners.EventsListener;
 import com.paradox.core.mines.cmd.MineCommand;
 import com.paradox.core.mines.listeners.MinesListener;
@@ -53,23 +56,24 @@ public class Loader extends PluginBase {
 	}
 
 	public void startMineResetTask() {
-		for (Mine m : MineUtils.getAllMinesFromConfig()) {
-			new NukkitRunnable() {
-				int i = 300;
+		if (!MineUtils.getAllMinesFromConfig().isEmpty()) {
+			for (Mine m : MineUtils.getAllMinesFromConfig()) {
+				new NukkitRunnable() {
+					int i = 300;
 
-				@Override
-				public void run() {
-					if (i <=0) {
-						m.resetMine();
-						i = 300;
+					@Override
+					public void run() {
+						if (i <= 0) {
+							m.resetMine();
+							i = 300;
+						}
+						for (Mine m : MineUtils.getAllMinesFromConfig()) {
+							api.staticPlaceholder(m.getMineName() + "_resetMineDelay", T -> i, new String[0]);
+						}
+						i--;
 					}
-					for (Mine m : MineUtils.getAllMinesFromConfig()) {
-						api.staticPlaceholder(m.getMineName() + "_resetMineDelay", T -> i,
-								new String[0]);
-					}
-					i--;
-				}
-			}.runTaskTimer(this, 0, 20);
+				}.runTaskTimer(this, 0, 20);
+			}
 		}
 	}
 
@@ -88,6 +92,8 @@ public class Loader extends PluginBase {
 		getServer().getCommandMap().register("mines", new MineCommand());
 		getServer().getCommandMap().register("rankup", new RankupCommand());
 		getServer().getCommandMap().register("sell", new SellCommand());
+		getServer().getCommandMap().register("tps", new TPSCommand());
+		getServer().getCommandMap().register("ah", new AuctionHouseComamnd());
 	}
 
 	public void registerEvents() {
@@ -95,6 +101,7 @@ public class Loader extends PluginBase {
 		getServer().getPluginManager().registerEvents(new OrbsListener(), this);
 		getServer().getPluginManager().registerEvents(new EnchantListener(), this);
 		getServer().getPluginManager().registerEvents(new MinesListener(), this);
+		getServer().getPluginManager().registerEvents(new AuctionListener(), this);
 	}
 
 	public static Loader getLoader() {

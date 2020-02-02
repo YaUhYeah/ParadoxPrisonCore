@@ -53,7 +53,9 @@ public class MineUtils {
 
 	public static boolean isLocInMine(Location loc) {
 		for (Mine m : getAllMinesFromConfig()) {
-			return m.getRegion().isInRegion(loc);
+			if (m.getRegion().isInRegion(loc)) {
+				return true;
+			}
 		}
 		return false;
 	}

@@ -39,7 +39,7 @@ public class RankStorage {
 		//todo: add all ranks then finish rankutils.
 	}
 	
-	public static Rank A = new Rank("A", 1, 1000, true, false);
+	public static Rank A = new Rank("A", 1, 1500, true, false);
 	public static Rank B = new Rank("B", 2, 2500, false, false);
 	public static Rank C = new Rank("C", 3, 5000, false, false);
 	public static Rank D = new Rank("D", 4, 10000, false, false);

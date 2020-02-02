@@ -21,6 +21,7 @@ public class EnchantHandler {
 		enchants.add(new Magnet());
 		enchants.add(new Greed());
 		enchants.add(new AutoSell());
+		enchants.add(new Donator());
 		return enchants;
 	}
 
