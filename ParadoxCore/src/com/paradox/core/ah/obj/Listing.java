@@ -9,12 +9,20 @@ public class Listing {
 	private Item item;
 	private int pricing;
 	private UUID sellerUUID;
-
-	public Listing(Item item, int pricing, UUID sellerUUID) {
+	private String description;
+	private int id;
+	
+	public Listing(Item item, int pricing, UUID sellerUUID, String desc, int id) {
 		super();
 		this.item = item;
 		this.pricing = pricing;
 		this.sellerUUID = sellerUUID;
+		this.description = desc;
+		this.id=id;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public Item getItem() {
@@ -27,6 +35,10 @@ public class Listing {
 
 	public UUID getSellerUUID() {
 		return sellerUUID;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 }

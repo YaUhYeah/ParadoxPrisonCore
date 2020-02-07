@@ -8,13 +8,13 @@ public class Fortune extends CustomEnchant {
 	private int level;
 
 	public Fortune(int level) {
-		super("Fortune", level, 25, StringUtils.translateColors("&7Fortune"), "More drops for mining!",
+		super("Fortune", level, 10, StringUtils.translateColors("&7Fortune"), "More drops for mining!",
 				7500, EnchantType.VANILLA);
 		this.level = level;
 	}
 
 	public Fortune() {
-		super("Fortune", 1, 25, StringUtils.translateColors("&7Fortune"), "More drops for mining!",
+		super("Fortune", 1, 10, StringUtils.translateColors("&7Fortune"), "More drops for mining!",
 				7500, EnchantType.VANILLA);	}
 
 	public int getLevel() {

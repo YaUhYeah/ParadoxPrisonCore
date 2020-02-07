@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.paradox.core.Loader;
 
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import cn.nukkit.utils.Config;
@@ -19,9 +20,12 @@ public class GeneralUtils {
 			worth.set("worth.1", 8.0);
 			worth.set("worth.4", 4.0);
 			worth.set("worth.5", 12.0);
+			worth.set("worth.263", 10.0);
+			worth.set("worth.16", 9.0);
 			worth.set("worth.14", 20.0);
 			worth.set("worth.15", 28.0);
 			worth.set("worth.331", 24.0);
+			worth.set("worth.73", 24.0);
 			worth.set("worth.266", 40.0);
 			worth.set("worth.265", 48.0);
 			worth.set("worth.264", 50.0);
@@ -50,4 +54,13 @@ public class GeneralUtils {
 		Random r = new Random();
 		return r.nextInt((max - min) + 1) + min;
 	}
+
+	public static boolean canPlayerBuild(Player p) {
+		SRegionProtectorMain api = SRegionProtectorMain.getInstance();
+		if (!p.getBoundingBox().intersectsWith(api.getRegionManager().getRegion("spawn").getBoundingBox())) {
+			return true;
+		}
+		return false;
+	}
+
 }

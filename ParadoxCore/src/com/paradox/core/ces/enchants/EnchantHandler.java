@@ -22,6 +22,9 @@ public class EnchantHandler {
 		enchants.add(new Greed());
 		enchants.add(new AutoSell());
 		enchants.add(new Donator());
+		enchants.add(new Explosive());
+		enchants.add(new JackHammer());
+		enchants.add(new Gears());
 		return enchants;
 	}
 

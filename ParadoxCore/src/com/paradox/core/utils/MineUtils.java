@@ -12,6 +12,7 @@ import com.paradox.core.mines.obj.MineRegion;
 
 import cn.nukkit.block.Block;
 import cn.nukkit.level.Location;
+import cn.nukkit.level.Position;
 import cn.nukkit.utils.Config;
 
 public class MineUtils {
@@ -51,6 +52,15 @@ public class MineUtils {
 		return mines;
 	}
 
+	public static Mine mineByLoc(Location loc) {
+		for (Mine m : getAllMinesFromConfig()) {
+			if (m.getRegion().isInRegion(loc)) {
+				return m;
+			}
+		}
+		return null;
+	}
+
 	public static boolean isLocInMine(Location loc) {
 		for (Mine m : getAllMinesFromConfig()) {
 			if (m.getRegion().isInRegion(loc)) {
@@ -67,6 +77,18 @@ public class MineUtils {
 			}
 		}
 		return null;
+	}
+
+	public static List<Position> getCorners(Location loc) {
+		List<Position> locs = new ArrayList<>();
+		if (mineByLoc(loc) != null) {
+			Mine m = mineByLoc(loc);
+			Position cornerOne = m.getRegion().getLocMax().setComponents(m.getRegion().getLocMax().getX(), loc.getY(), m.getRegion().getLocMax().getZ());
+			Position cornerTwo = m.getRegion().getLocMin().setComponents(m.getRegion().getLocMin().getX(), loc.getY(), m.getRegion().getLocMin().getZ());
+			locs.add(cornerOne);
+			locs.add(cornerTwo);
+		}
+		return locs;
 	}
 
 }

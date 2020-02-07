@@ -1,5 +1,6 @@
 package com.paradox.core.orbs.listeners;
 
+import com.paradox.core.general.listeners.EventsListener;
 import com.paradox.core.utils.CEUtils;
 import com.paradox.core.utils.GeneralUtils;
 import com.paradox.core.utils.ItemStorage;
@@ -26,6 +27,18 @@ public class OrbsListener implements Listener {
 			int amount = GeneralUtils.getRandomNumberInRange(1000, 10000);
 			OrbEconomyUtils.addPlayerBalance(p, amount);
 			p.sendMessage(StringUtils.getPrefix() + "You were given " + amount + " orbs!");
+		} else if (i.getCustomName().equals(ItemStorage.orbPouchTierTwo().getCustomName())) {
+			e.setCancelled();
+			GeneralUtils.pop(i, p, 1);
+			int amount = GeneralUtils.getRandomNumberInRange(10000, 100000);
+			OrbEconomyUtils.addPlayerBalance(p, amount);
+			p.sendMessage(StringUtils.getPrefix() + "You were given " + amount + " orbs!");
+		} else if (i.getCustomName().equals(ItemStorage.orbPouchTierThree().getCustomName())) {
+			e.setCancelled();
+			GeneralUtils.pop(i, p, 1);
+			int amount = GeneralUtils.getRandomNumberInRange(100000, 1000000);
+			OrbEconomyUtils.addPlayerBalance(p, amount);
+			p.sendMessage(StringUtils.getPrefix() + "You were given " + amount + " orbs!");
 		}
 	}
 
@@ -36,13 +49,24 @@ public class OrbsListener implements Listener {
 		if (i.getId() == 278) {
 			if (CEUtils.containsEnchantment(i, CEUtils.getCEByDisplayName(StringUtils.translateColors("&aGreed")))) {
 				if (MineUtils.isLocInMine(e.getBlock().getLocation())) {
-					int lvl = CEUtils.getLevelOfEnchantByDisplayName(StringUtils.translateColors("&aGreed"), i);
-					double incr = lvl / 10.0D;
-					int actualAmount = (int) Math.floor(incr);
-					OrbEconomyUtils.addPlayerBalance(p, 1 + actualAmount);
+					if (!EventsListener.playersOrbsBooster.containsKey(p)) {
+						int lvl = CEUtils.getLevelOfEnchantByDisplayName(StringUtils.translateColors("&aGreed"), i);
+						double incr = lvl / 10.0D;
+						int actualAmount = (int) Math.floor(incr);
+						OrbEconomyUtils.addPlayerBalance(p, 1 + actualAmount);
+					} else {
+						int lvl = CEUtils.getLevelOfEnchantByDisplayName(StringUtils.translateColors("&aGreed"), i);
+						double incr = lvl / 10.0D;
+						int actualAmount = (int) Math.floor(incr) * EventsListener.playersOrbsBooster.get(p);
+						OrbEconomyUtils.addPlayerBalance(p, 1 + actualAmount);
+					}
 				}
 			} else {
-				OrbEconomyUtils.addPlayerBalance(p, 1);
+				if (!EventsListener.playersOrbsBooster.containsKey(p)) {
+					OrbEconomyUtils.addPlayerBalance(p, 1);
+				} else {
+					OrbEconomyUtils.addPlayerBalance(p, 1 * EventsListener.playersOrbsBooster.get(p));
+				}
 			}
 		}
 	}

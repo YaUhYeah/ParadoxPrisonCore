@@ -58,6 +58,20 @@ public class OrbsCmd extends Command {
 					} else {
 						sender.sendMessage(StringUtils.getPrefix() + "That player is not online.");
 					}
+				} else if (args[0].equals("set")) {
+					Player target = Loader.getLoader().getServer().getPlayer(args[1]);
+					if (target != null) {
+						try {
+							int amount = Integer.parseInt(args[2]);
+							OrbEconomyUtils.setPlayerBalance(target, amount);
+							sender.sendMessage(
+									StringUtils.getPrefix() + "Set " + target.getName() + "'s orbs to amount " + amount);
+						} catch (NumberFormatException e) {
+							sender.sendMessage(StringUtils.getPrefix() + "You must specify a number for amount.");
+						}
+					} else {
+						sender.sendMessage(StringUtils.getPrefix() + "That player is not online.");
+					}
 				}
 			} else if (args.length == 4) {
 				if (args[0].equals("givepouch")) {
@@ -74,6 +88,23 @@ public class OrbsCmd extends Command {
 								target.sendMessage(StringUtils.getPrefix() + "You were given a Tier one OrbPouch!");
 								sender.sendMessage(StringUtils.getPrefix() + "Gave " + target.getName()
 										+ " a tier one orb pouch!");
+								break;
+							case 2: 
+								Item i1 = ItemStorage.orbPouchTierTwo();
+								i1.setCount(amount);
+								target.getInventory().addItem(i1);
+								target.sendMessage(StringUtils.getPrefix() + "You were given a Tier two OrbPouch!");
+								sender.sendMessage(StringUtils.getPrefix() + "Gave " + target.getName()
+										+ " a tier two orb pouch!");
+								break;
+							case 3:
+								Item i11 = ItemStorage.orbPouchTierThree();
+								i11.setCount(amount);
+								target.getInventory().addItem(i11);
+								target.sendMessage(StringUtils.getPrefix() + "You were given a Tier three OrbPouch!");
+								sender.sendMessage(StringUtils.getPrefix() + "Gave " + target.getName()
+										+ " a tier three orb pouch!");
+								break;
 							}
 						} catch (NumberFormatException e) {
 							sender.sendMessage(StringUtils.getPrefix() + "You must specify a number for amount.");
