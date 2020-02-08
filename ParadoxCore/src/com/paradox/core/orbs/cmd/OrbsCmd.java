@@ -25,7 +25,7 @@ public class OrbsCmd extends Command {
 				return false;
 			}
 		}
-		if (sender.hasPermission("paradox.admin")) {
+		if (sender.hasPermission("paradox.owner")) {
 			if (args.length == 3) {
 				if (args[0].equals("give")) {
 					Player target = Loader.getLoader().getServer().getPlayer(args[1]);

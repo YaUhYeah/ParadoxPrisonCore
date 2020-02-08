@@ -11,6 +11,7 @@ import com.paradox.core.ah.ListingHandler;
 import com.paradox.core.ah.obj.Listing;
 import com.paradox.core.utils.StringUtils;
 
+import cn.nukkit.IPlayer;
 import cn.nukkit.Player;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
@@ -64,9 +65,9 @@ public class AuctionListener implements Listener {
 							if (responseName != null) {
 								for (Listing l : ListingHandler.getAllListingsFromConfig()) {
 									if (responseName.contains(StringUtils.translateColors("&8#" + l.getId()))) {
-										ListingHandler.removeListingFromConfig(l.getId()+"");
-										p.sendMessage(
-												StringUtils.getPrefix() + "Item removed from auctions, and returned to you!");
+										ListingHandler.removeListingFromConfig(l.getId() + "");
+										p.sendMessage(StringUtils.getPrefix()
+												+ "Item removed from auctions, and returned to you!");
 										p.getInventory().addItem(l.getItem());
 									}
 								}
@@ -149,10 +150,12 @@ public class AuctionListener implements Listener {
 							String responseName = gui.getResponse().getClickedButton().getText();
 							if (responseName != null) {
 								for (Listing l : ListingHandler.getAllListingsFromConfig()) {
-									if (responseName.contains(StringUtils.translateColors("&8#" + l.getId()))) {
-										p.removeAllWindows();
-										p.showFormWindow(FormStorage.buyItem(l));
-										break;
+									if (l != null) {
+										if (responseName.contains(StringUtils.translateColors("&8#" + l.getId()))) {
+											p.removeAllWindows();
+											p.showFormWindow(FormStorage.buyItem(l));
+											break;
+										}
 									}
 								}
 							}
@@ -176,7 +179,9 @@ public class AuctionListener implements Listener {
 									p.getInventory().addItem(l.getItem());
 									p.sendMessage(StringUtils.getPrefix() + "You have purchased " + target.getName()
 											+ "'s item for " + l.getPricing());
+									IPlayer t = Loader.getLoader().getServer().getOfflinePlayer(l.getSellerUUID());
 									EconomyAPI.getInstance().reduceMoney(p, l.getPricing());
+									EconomyAPI.getInstance().addMoney(t, l.getPricing());
 									ListingHandler.removeListingFromConfig(l.getId() + "");
 									return;
 								} else {

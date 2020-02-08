@@ -89,7 +89,7 @@ public class FormStorage {
 		fc.addElement(new ElementLabel(StringUtils.translateColors("&b&lLore: &r&7" + str2.toString())));
 		fc.addElement(new ElementLabel(StringUtils.translateColors("&b&lPrice: &r&7$" + listing.getPricing())));
 		fc.addElement(new ElementLabel(StringUtils.translateColors("&b&lSeller: &r&7"
-				+ Loader.getLoader().getServer().getPlayer(listing.getSellerUUID()).get().getName())));
+				+ Loader.getLoader().getServer().getOfflinePlayer(listing.getSellerUUID()).getName())));
 		fc.addElement(new ElementLabel(
 				StringUtils.translateColors("&b&lSeller Description: &r&7" + listing.getDescription())));
 		return fc;

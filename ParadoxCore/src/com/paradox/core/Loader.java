@@ -12,6 +12,7 @@ import com.paradox.core.general.cmd.BoosterCmd;
 import com.paradox.core.general.cmd.EchestCommand;
 import com.paradox.core.general.cmd.EnchanterCmd;
 import com.paradox.core.general.cmd.InvseeCommand;
+import com.paradox.core.general.cmd.RTagCmd;
 import com.paradox.core.general.cmd.RepairCommand;
 import com.paradox.core.general.cmd.SellCommand;
 import com.paradox.core.general.cmd.TPSCommand;
@@ -138,6 +139,7 @@ public class Loader extends PluginBase {
 		getServer().getCommandMap().register("bomb", new BombCommand());
 		getServer().getCommandMap().register("invsee", new InvseeCommand());
 		getServer().getCommandMap().register("echest", new EchestCommand());
+		getServer().getCommandMap().register("rtag", new RTagCmd());
 	}
 
 	public void registerEvents() {

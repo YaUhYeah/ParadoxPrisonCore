@@ -18,11 +18,11 @@ public class BoosterCmd extends Command {
 	@Override
 	public boolean execute(CommandSender sender, String label, String[] args) {
 		if (args.length != 5) {
-			sender.sendMessage(StringUtils
-					.translateColors("&b&l(!)&r&7 Proper usage: /booster give <name> <amount> <multiplier> <sell/orbs>"));
+			sender.sendMessage(StringUtils.translateColors(
+					"&b&l(!)&r&7 Proper usage: /booster give <name> <amount> <multiplier> <sell/orbs>"));
 			return false;
 		}
-		if (sender.hasPermission("paradox.admin")) {
+		if (sender.hasPermission("paradox.owner")) {
 			if (args[0].equals("give")) {
 				Player t = Loader.getLoader().getServer().getPlayer(args[1]);
 				if (t != null) {
@@ -54,8 +54,7 @@ public class BoosterCmd extends Command {
 				}
 			}
 		} else {
-			sender.sendMessage(StringUtils.getPrefix()
-					+ "No permission to give boosters..");
+			sender.sendMessage(StringUtils.getPrefix() + "No permission to give boosters.");
 		}
 		return false;
 	}

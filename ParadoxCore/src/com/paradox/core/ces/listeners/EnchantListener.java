@@ -282,10 +282,16 @@ public class EnchantListener implements Listener {
 									e.setDrops(dropsNull);
 									return;
 								}
+								if (e.getBlock().getId() == 15) {
+									itemsToAdd = (new Item[] { new Item(265) });
+								} else if (e.getBlock().getId() == 14) {
+									itemsToAdd = (new Item[] { new Item(266) });
+								}
 								inventoryAutoAdd.addItem(itemsToAdd);
 							}
 							Item[] dropsNull = { new Item(0) };
 							e.setDrops(dropsNull);
+							return;
 						}
 					}
 					if (CEUtils.containsEnchantment(tool,
@@ -294,6 +300,7 @@ public class EnchantListener implements Listener {
 							e.setCancelled();
 							e.getPlayer().getLevel().setBlock(e.getBlock().getLocation(), new BlockAir());
 							SellCommand.sellItem(e.getPlayer(), e.getBlock().toItem());
+							return;
 						}
 					}
 					if (CEUtils.containsEnchantment(tool,
@@ -310,8 +317,8 @@ public class EnchantListener implements Listener {
 									OrbEconomyUtils.addPlayerBalance(o,
 											(lvl * 10) * EventsListener.playersOrbsBooster.get(e.getPlayer()));
 									o.sendPopup(StringUtils.getPrefix() + e.getPlayer().getName() + " donated everyone "
-											+ (lvl * 10) * EventsListener.playersOrbsBooster
-													.get(e.getPlayer() + " orbs with donator enchant!"));
+											+ (lvl * 10) * EventsListener.playersOrbsBooster.get(e.getPlayer())
+											+ " orbs with donator enchant!");
 								}
 							}
 						}
@@ -319,13 +326,21 @@ public class EnchantListener implements Listener {
 					if (CEUtils.containsEnchantment(tool,
 							CEUtils.getCEByDisplayName(StringUtils.translateColors("&cExplosive")))) {
 						runExplosive(e.getPlayer(), e.getBlock(), e);
+						return;
 					}
 					if (CEUtils.containsEnchantment(tool, Enchantment.get(18))) {
 						runFortune(e.getPlayer(), e.getBlock(), e);
+						return;
 					}
 					if (CEUtils.containsEnchantment(tool,
 							CEUtils.getCEByDisplayName(StringUtils.translateColors("&eJackHammer")))) {
 						runJackHammer(e.getPlayer(), e.getBlock(), e);
+						return;
+					}
+					if (e.getBlock().getId() == 15) {
+						e.setDrops(new Item[] { new Item(265) });
+					} else if (e.getBlock().getId() == 14) {
+						e.setDrops(new Item[] { new Item(266) });
 					}
 				} else {
 					e.setCancelled();
@@ -337,6 +352,15 @@ public class EnchantListener implements Listener {
 	public void runFortuneMagnet(Player player, Block b, BlockBreakEvent e) {
 		Item tool = player.getInventory().getItemInHand();
 		int lvl = tool.getEnchantment(18).getLevel();
+		int rand = NumberUtils.random(1, 100);
+		if (rand > lvl) {
+			return;
+		}
+		if (e.getBlock().getId() == 15) {
+			e.setDrops(new Item[] { new Item(265) });
+		} else if (e.getBlock().getId() == 14) {
+			e.setDrops(new Item[] { new Item(266) });
+		}
 		for (Item i : e.getDrops()) {
 			for (int o = 0; o < lvl + 1; o++) {
 				if (CEUtils.containsEnchantment(tool,
@@ -355,24 +379,42 @@ public class EnchantListener implements Listener {
 		Item tool = player.getInventory().getItemInHand();
 		int lvl = tool.getEnchantment(18).getLevel();
 		for (Item i : e.getDrops()) {
+			int rand = NumberUtils.random(1, 100);
+			if (rand > lvl) {
+				return;
+			}
 			for (int o = 0; o < lvl + 1; o++) {
 				if (CEUtils.containsEnchantment(tool,
 						CEUtils.getCEByDisplayName(StringUtils.translateColors("&fMagnet")))) {
 					if (!CEUtils.containsEnchantment(tool,
 							CEUtils.getCEByDisplayName(StringUtils.translateColors("&dAutoSell")))) {
 						PlayerInventory inventoryAutoAdd = player.getInventory();
+						if (e.getBlock().getId() == 15) {
+							i = new Item(265);
+						} else if (e.getBlock().getId() == 14) {
+							i = new Item(266);
+						}
 						i.setCount(lvl);
 						inventoryAutoAdd.addItem(i);
-						return;
 					}
 				}
 				if (CEUtils.containsEnchantment(tool,
 						CEUtils.getCEByDisplayName(StringUtils.translateColors("&dAutoSell")))) {
+					if (e.getBlock().getId() == 15) {
+						i = new Item(265);
+					} else if (e.getBlock().getId() == 14) {
+						i = new Item(266);
+					}
 					if (SellCommand.canSell(i)) {
 						e.setCancelled();
 						SellCommand.sellItem(e.getPlayer(), i);
 					}
 				} else {
+					if (e.getBlock().getId() == 15) {
+						i = new Item(265);
+					} else if (e.getBlock().getId() == 14) {
+						i = new Item(266);
+					}
 					player.getLevel().dropItem(b.getLocation(), i);
 				}
 			}
@@ -436,6 +478,11 @@ public class EnchantListener implements Listener {
 							if (b.getId() != 19) {
 								PlayerInventory inventoryAutoAdd = e.getPlayer().getInventory();
 								Item[] itemToAdd = e.getDrops();
+								if (e.getBlock().getId() == 15) {
+									itemToAdd = (new Item[] { new Item(265) });
+								} else if (e.getBlock().getId() == 14) {
+									itemToAdd = (new Item[] { new Item(266) });
+								}
 								inventoryAutoAdd.addItem(itemToAdd);
 							}
 						}
@@ -446,6 +493,13 @@ public class EnchantListener implements Listener {
 							SellCommand.sellItem(e.getPlayer(), b.toItem());
 						}
 					}
+					Item[] itemToAdd = e.getDrops();
+					if (e.getBlock().getId() == 15) {
+						itemToAdd = (new Item[] { new Item(265) });
+					} else if (e.getBlock().getId() == 14) {
+						itemToAdd = (new Item[] { new Item(266) });
+					}
+					e.getPlayer().getLevel().dropItem(loc, itemToAdd[0]);
 					e.getPlayer().getLevel().setBlock(b.getLocation(), new BlockAir());
 					if (!EventsListener.playersOrbsBooster.containsKey(e.getPlayer())) {
 						OrbEconomyUtils.addPlayerBalance(e.getPlayer(), 1);
@@ -503,8 +557,13 @@ public class EnchantListener implements Listener {
 										CEUtils.getCEByDisplayName(StringUtils.translateColors("&dAutoSell")))) {
 									if (b.getId() != 19) {
 										PlayerInventory inventoryAutoAdd = e.getPlayer().getInventory();
-										Item itemToAdd = b.toItem();
-										inventoryAutoAdd.addItem(b.getDrops(itemToAdd));
+										Item[] itemToAdd = e.getDrops();
+										if (e.getBlock().getId() == 15) {
+											itemToAdd = (new Item[] { new Item(265) });
+										} else if (e.getBlock().getId() == 14) {
+											itemToAdd = (new Item[] { new Item(266) });
+										}
+										inventoryAutoAdd.addItem(itemToAdd);
 									}
 								}
 							} else if (CEUtils.containsEnchantment(tool,

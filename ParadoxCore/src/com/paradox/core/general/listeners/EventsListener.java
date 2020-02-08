@@ -1,7 +1,10 @@
 package com.paradox.core.general.listeners;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import com.paradox.core.Loader;
@@ -37,6 +40,7 @@ import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.scheduler.NukkitRunnable;
 import cn.nukkit.utils.Config;
+import me.onebone.economyapi.EconomyAPI;
 
 public class EventsListener implements Listener {
 
@@ -45,6 +49,46 @@ public class EventsListener implements Listener {
 	public static HashMap<Player, Integer> playersOrbsBooster = new HashMap<>();
 	public static Config players = Loader.getLoader().getPlayerCfg();
 	public static File playersFile = Loader.getLoader().getPlayersFile();
+
+	public String tagByPerm(String perm) {
+		switch (perm) {
+		case "tags.paradox":
+			return StringUtils.translateColors("&6&l+&eParadox&6+");
+		case "tags.noob":
+			return StringUtils.translateColors("&bNoob &3:(");
+		case "tags.hacker":
+			return StringUtils.translateColors("&c&lHacking&cScum");
+		case "tags.pvper":
+			return StringUtils.translateColors("&aPvper");
+		case "tags.god":
+			return StringUtils.translateColors("&f&lGod");
+		}
+		return perm;
+	}
+
+	public List<String> listOfPermsTags() {
+		List<String> list = new ArrayList<String>();
+		list.add("tags.paradox");
+		list.add("tags.noob");
+		list.add("tags.hacker");
+		list.add("tags.pvper");
+		list.add("tags.god");
+		return list;
+	}
+
+	public boolean hasAllTags(Player p) {
+		return (p.hasPermission("tags.paradox") && p.hasPermission("tags.noob") && p.hasPermission("tags.hacker")
+				&& p.hasPermission("tags.pvper") && p.hasPermission("tags.god"));
+	}
+
+	public String getRandomTagPerm(Player p) {
+		Random r = new Random();
+		String perm = listOfPermsTags().get(r.nextInt(listOfPermsTags().size()));
+		if (p.hasPermission(perm)) {
+			getRandomTagPerm(p);
+		}
+		return perm;
+	}
 
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
@@ -172,8 +216,9 @@ public class EventsListener implements Listener {
 	public EntityItem createItemEntity(Location loc, CompoundTag itemTag, Vector3 v3, Player p) {
 		EntityItem itemEntity = new EntityItem(
 				p.getLevel().getChunk((int) loc.getX() >> 4, (int) loc.getZ() >> 4, true),
-				new CompoundTag().putList(new ListTag<DoubleTag>("Pos").add(new DoubleTag("", loc.getX()))
-						.add(new DoubleTag("", loc.getY())).add(new DoubleTag("", loc.getZ())))
+				new CompoundTag()
+						.putList(new ListTag<DoubleTag>("Pos").add(new DoubleTag("", loc.getX()))
+								.add(new DoubleTag("", loc.getY())).add(new DoubleTag("", loc.getZ())))
 
 						.putList(new ListTag<DoubleTag>("Motion").add(new DoubleTag("", v3.x))
 								.add(new DoubleTag("", v3.y)).add(new DoubleTag("", v3.z)))
@@ -228,6 +273,7 @@ public class EventsListener implements Listener {
 			}
 		}
 	}
+
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
@@ -276,6 +322,20 @@ public class EventsListener implements Listener {
 						i1--;
 					}
 				}.runTaskTimer(Loader.getLoader(), 0, 20);
+			}
+		}
+		if (i.getCustomName().equals(ItemStorage.randomTag().getCustomName())) {
+			if (hasAllTags(p)) {
+				GeneralUtils.pop(i, p, 1);
+				EconomyAPI.getInstance().addMoney(p, 250000D);
+				p.sendMessage(StringUtils.getPrefix() + StringUtils
+						.translateColors("You already have all /tags! Given $250,000. &f(Not including custom)"));
+				return;
+			} else {
+				String perm = getRandomTagPerm(p);
+				p.addAttachment(Loader.getLoader(), perm, true);
+				p.sendMessage(StringUtils.getPrefix() + "You have been granted to the tag " + tagByPerm(perm)
+						+ " use /tags now!");
 			}
 		}
 	}

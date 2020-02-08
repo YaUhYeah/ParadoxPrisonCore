@@ -24,7 +24,7 @@ public class DeleteKitCommand extends Command {
 	public boolean execute(CommandSender sender, String label, String[] args) {
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
-			if (p.hasPermission("paradox.admin")) {
+			if (p.hasPermission("paradox.owner")) {
 				if (args.length != 1) {
 					p.sendMessage(StringUtils.translateColors("Proper usage: /deletekit <name>"));
 					return false;

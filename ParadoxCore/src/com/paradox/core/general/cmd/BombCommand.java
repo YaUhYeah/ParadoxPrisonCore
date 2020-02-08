@@ -24,7 +24,7 @@ public class BombCommand extends Command {
 					.translateColors("&b&l(!)&r&7 Proper usage: /bomb give <name> <amount> <small,medium,large>"));
 			return false;
 		}
-		if (sender.hasPermission("paradox.admin")) {
+		if (sender.hasPermission("paradox.owner")) {
 			if (args[0].equals("give")) {
 				Player t = Loader.getLoader().getServer().getPlayer(args[1]);
 				if (t != null) {

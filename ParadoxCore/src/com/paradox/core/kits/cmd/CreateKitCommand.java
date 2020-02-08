@@ -27,7 +27,7 @@ public class CreateKitCommand extends Command {
 	public boolean execute(CommandSender sender, String label, String[] args) {
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
-			if (p.hasPermission("paradox.admin")) {
+			if (p.hasPermission("paradox.owner")) {
 				if (args.length != 2) {
 					p.sendMessage(StringUtils.translateColors("Proper usage: /createkit <name> <cooldown>"));
 					return false;

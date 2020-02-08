@@ -37,6 +37,13 @@ public class ItemStorage {
 				+ "x Sell Booster &r&7(Right Click)\nMultiplies the money from any items \nsold for 10 minutes.\n\n&f((Right Click to activate!))"));
 		return it;
 	}
+	
+	public static Item randomTag() {
+		Item it = new Item(421);
+		it.setCustomName(StringUtils.translateColors(
+				"&a&lRandom Tag &r&7(Right Click)\nGives perms to a random tag in /tags.\n&7If you already have all tags, you get $250,000\n&f((Right click to redeem!))"));
+		return it;
+	}
 
 	public static Item smallBomb() {
 		Item it = new Item(381);
